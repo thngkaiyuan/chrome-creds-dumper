@@ -2,6 +2,7 @@ import win32crypt
 import win32api
 import re
 import os
+import sys
 import sqlite3
 
 def find_all_files(root_folder, rex):
@@ -30,6 +31,11 @@ def dump_all_credentials():
             print('Error dumping credentials from', db_file)
             pass
 
+def dump_default_credentials():
+    print('Dumping saved passwords from the default location on your computer')
+    default_db_file = os.getenv("LOCALAPPDATA") + r'\Google\Chrome\User Data\Default\Login Data'
+    dump_credentials(default_db_file)
+
 def dump_credentials(db_file):
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
@@ -38,10 +44,16 @@ def dump_credentials(db_file):
         url = res[0]
         username = res[1]
         password = win32crypt.CryptUnprotectData(res[2])[1]
+        if username == '' or password == '':
+            continue
         print('------------------------------------------------')
         print('URL:', url)
         print('User:', username)
         print('Pass:', password)
         print('------------------------------------------------')
 
-dump_all_credentials()
+if __name__ == '__main__':
+    if len(sys.argv) > 1 and '-a' in sys.argv[1]:
+        dump_all_credentials()
+    else:
+        dump_default_credentials()
