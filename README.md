@@ -2,6 +2,8 @@
 
 Dump login credentials saved by Google Chrome, just for fun :)
 
+![image](https://cloud.githubusercontent.com/assets/10496851/17859952/1d45f368-68be-11e6-8fbb-e021d06ac4a5.png)
+
 ## Usage
 
 To dump saved passwords from the default location, execute
